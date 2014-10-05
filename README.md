@@ -16,4 +16,8 @@ Build + Run Instructions:
 - Clone repo
 - "mvn package"
 - "java -jar target/flex-server-1.0-SNAPSHOT.jar server config.yaml"
+
+
+Example POST:
+    curl --verbose --header "Content-Type: application/json" -X POST -d '{"firstName": "FOO", "lastName":"BAR", "phone":"324234234"}' http://localhost:8080/members/create
   

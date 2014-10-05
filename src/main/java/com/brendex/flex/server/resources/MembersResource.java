@@ -5,6 +5,8 @@ import org.skife.jdbi.v2.DBI;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by brendanshort on 04/10/2014.
@@ -35,37 +37,29 @@ public class MembersResource {
     }
 
     @POST
-    public Response createMember(
-            @FormParam("name") String name,
-            @FormParam("phone") String phone) {
-        // store the new contact
-        // ...
-        return Response
-                .created(null)
-                .build();
+    @Path("/create")
+    public Response createMember(Member member) throws URISyntaxException {
+        int newContactId = memberDAO.createContact(member.getFirstName(), member.getLastName(), member.getPhone());
+        return Response.created(new URI(String.valueOf(newContactId))).build();
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response deleteMember(@PathParam("id") int id) {
+    @Path("/delete/{id}")
+    public Response deleteContact(@PathParam("id") int id) {
         // delete the contact with the provided id
-        // ...
-        return Response
-                .noContent()
-                .build();
+        memberDAO.deleteContact(id);
+        return Response.noContent().build();
     }
 
     @PUT
-    @Path("/{id}")
-    public Response updateMember(
-            @PathParam("id") int id,
-            @FormParam("name") String name,
-            @FormParam("phone") String phone) {
+    @Path("/update/{id}")
+    public Response updateContact(@PathParam("id") int id, Member member) {
         // update the contact with the provided ID
-        // ...
-        return Response
-                .ok("{Member_id: "+ id +", name: \""+ name +"\",phone: \""+ phone +"\" }")
-                .build();
+        memberDAO.updateContact(id, member.getFirstName(),
+                member.getLastName(), member.getPhone());
+        return Response.ok(
+                new Member(id, member.getFirstName(), member.getLastName(),
+                        member.getPhone())).build();
     }
 
 }
