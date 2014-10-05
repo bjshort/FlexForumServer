@@ -15,5 +15,5 @@ First phase of the project aims to acheive the following objectives:
 Build + Run Instructions:
 - Clone repo
 - "mvn package"
-- "java -jar target/flex-server-1.0-SNAPSHOT.jar server config.yaml
+- "java -jar target/flex-server-1.0-SNAPSHOT.jar server config.yaml"
   
