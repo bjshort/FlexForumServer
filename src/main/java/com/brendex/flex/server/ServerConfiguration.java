@@ -2,19 +2,18 @@ package com.brendex.flex.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class ServerConfiguration extends Configuration {
+    @Valid
+    @NotNull
     @JsonProperty
-    private String message;
+    private DataSourceFactory database = new DataSourceFactory();
 
-    @JsonProperty
-    private int messageRepetitions;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public int getMessageRepetitions() {
-        return messageRepetitions;
+    public DataSourceFactory getDataSourceFactory() {
+        return database;
     }
 }

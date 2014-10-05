@@ -1,5 +1,7 @@
 package com.brendex.flex.server.resources;
+import com.brendex.flex.server.dao.MemberDAO;
 import com.brendex.flex.server.domains.Member;
+import org.skife.jdbi.v2.DBI;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -12,12 +14,24 @@ import javax.ws.rs.core.*;
 @Produces(MediaType.APPLICATION_JSON)
 public class MembersResource {
 
+    private final MemberDAO memberDAO;
+
+    public MembersResource(DBI jdbi) {
+        memberDAO = jdbi.onDemand(MemberDAO.class);
+    }
+
     @GET
     @Path("/{id}")
     public Response getMember(@PathParam("id") int id){
-        return Response
-                .ok(new Member(1, "Brendan", "Short", "+234234234"))
-                .build();
+        Member member = memberDAO.findMemberById(id);
+
+        if(member != null){
+            return Response
+                    .ok(member)
+                    .build();
+        } else {
+            return Response.noContent().build();
+        }
     }
 
     @POST
