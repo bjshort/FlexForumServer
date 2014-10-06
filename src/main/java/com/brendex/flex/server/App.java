@@ -1,7 +1,10 @@
 package com.brendex.flex.server;
 
 import com.brendex.flex.server.dao.MemberDAO;
+import com.brendex.flex.server.domains.Member;
 import com.brendex.flex.server.resources.MembersResource;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jdbi.DBIFactory;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
@@ -14,20 +17,24 @@ import io.dropwizard.setup.Environment;
 public class App extends Application<ServerConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
+    private final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(Member.class) {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
+            return configuration.getDataSourceFactory();
+        }
+    };
+
     @Override
-    public void initialize(Bootstrap<ServerConfiguration> b) {}
+    public void initialize(Bootstrap<ServerConfiguration> b) {
+        b.addBundle(hibernate);
+    }
 
     @Override
     public void run(ServerConfiguration c, Environment e) throws Exception {
-        LOGGER.info("Method App#run() called");
-        System.out.println( "Hello world, by Dropwizard!" );
 
         //Do database stuff
-        final DBIFactory factory = new DBIFactory();
-        final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "postgresql");
-
-        // Add the resource to the environment
-        e.jersey().register(new MembersResource(jdbi));
+        final MemberDAO dao = new MemberDAO(hibernate.getSessionFactory());
+        e.jersey().register(new MembersResource(dao));
 
     }
 

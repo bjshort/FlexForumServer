@@ -1,12 +1,22 @@
 package com.brendex.flex.server.domains;
 
-/**
- * Created by brendanshort on 04/10/2014.
- */
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "members")
 public class Member {
+    @Id
     private final int id;
+
+    @Column(name = "`firstName`")
     private final String firstName;
+
+    @Column(name = "`lastName`")
     private final String lastName;
+
     private final String phone;
 
     public Member() {
