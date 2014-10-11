@@ -21,3 +21,7 @@ Build + Run Instructions:
 Example POST:
     curl --verbose --header "Content-Type: application/json" -X POST -d '{"firstName": "FOO", "lastName":"BAR", "phone":"324234234"}' http://localhost:8080/members/create
   
+Database migrations:
+- Set up database 'flex' as outlined in config.yaml
+- run 'mvn package' in project folder
+- Use command 'java -jar target/flex-server-1.0-SNAPSHOT.jar db migrate config.yaml'

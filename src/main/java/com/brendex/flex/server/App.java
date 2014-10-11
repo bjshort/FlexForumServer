@@ -6,6 +6,7 @@ import com.brendex.flex.server.resources.MembersResource;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +25,17 @@ public class App extends Application<ServerConfiguration> {
         }
     };
 
+
+
     @Override
     public void initialize(Bootstrap<ServerConfiguration> b) {
         b.addBundle(hibernate);
+        b.addBundle(new MigrationsBundle<ServerConfiguration>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
     }
 
     @Override

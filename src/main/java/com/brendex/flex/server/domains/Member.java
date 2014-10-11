@@ -19,18 +19,22 @@ public class Member {
 
     private final String phone;
 
+    private final String email;
+
     public Member() {
         this.id= 0;
         this.firstName = null;
         this.lastName = null;
         this.phone = null;
+        this.email = null;
     }
 
-    public Member(int id, String firstName, String lastName,String phone) {
+    public Member(int id, String firstName, String lastName, String phone, String email) {
         this.id= id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.email = email;
     }
 
     public int getId() {

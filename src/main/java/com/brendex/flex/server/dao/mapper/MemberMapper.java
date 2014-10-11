@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 public class MemberMapper implements ResultSetMapper<Member> {
     public Member map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-        return new Member(r.getInt("id"), r.getString("firstName"), r.getString("lastName"), r.getString("phone"));
+        return new Member(r.getInt("id"), r.getString("firstName"), r.getString("lastName"), r.getString("phone"),
+                r.getString("email"));
     }
 }
