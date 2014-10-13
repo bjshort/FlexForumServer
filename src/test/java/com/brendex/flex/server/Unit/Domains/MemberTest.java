@@ -26,7 +26,6 @@ public class MemberTest {
         } catch (Exception e){
             LOGGER.error("There was an error: " + e.getMessage());
         }
-
     }
 
 }

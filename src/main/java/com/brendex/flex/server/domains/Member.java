@@ -1,5 +1,7 @@
 package com.brendex.flex.server.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -23,16 +25,16 @@ public class Member {
 
     private String password;
 
+    @JsonIgnore
     private String status;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private Set<Post> posts;
 
     public Member() {
         this.id = 0;
         this.status = "ACTIVE";
-        this.email = null;
-        this.status = null;
     }
 
     public Member(String firstName, String lastName, String phone, String email, String password) {

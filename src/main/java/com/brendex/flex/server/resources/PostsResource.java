@@ -38,7 +38,6 @@ public class PostsResource {
     }
 
     @POST
-    @Path("/create")
     @Timed
     @UnitOfWork
     public Response createPost(String message, Long memberId) throws URISyntaxException {
@@ -48,7 +47,7 @@ public class PostsResource {
     }
 
     @DELETE
-    @Path("/delete/{id}")
+    @Path("/{id}")
     public Response deleteContact(@PathParam("id") Long id) {
         // delete the contact with the provided id
         postDAO.deletePost(id);

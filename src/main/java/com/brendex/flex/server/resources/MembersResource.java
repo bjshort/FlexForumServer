@@ -27,10 +27,12 @@ public class MembersResource {
     }
 
     @GET
+    @UnitOfWork
     @Path("/{id}")
     public Response getMember(@PathParam("id") long id){
+        System.out.println("-- Finding with id: " + id);
         Member member = memberDAO.findById(id);
-
+        System.out.println("-- Memmber found : " + member);
         if(member != null){
             return Response
                     .ok(member)
@@ -41,7 +43,6 @@ public class MembersResource {
     }
 
     @POST
-    @Path("/create")
     @Timed
     @UnitOfWork
     public Response createMember(Member member) throws URISyntaxException {
@@ -55,7 +56,8 @@ public class MembersResource {
     }
 
     @DELETE
-    @Path("/delete/{id}")
+    @UnitOfWork
+    @Path("/{id}")
     public Response deleteContact(@PathParam("id") Long id) {
         // delete the contact with the provided id
         memberDAO.deleteMember(id);
