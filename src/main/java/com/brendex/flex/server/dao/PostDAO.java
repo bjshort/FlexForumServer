@@ -1,30 +1,35 @@
 package com.brendex.flex.server.dao;
 
 import com.brendex.flex.server.domains.Member;
+import com.brendex.flex.server.domains.Post;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class MemberDAO extends AbstractDAO<Member> {
-    public MemberDAO(SessionFactory factory) {
+/**
+ * Created by brendanshort on 11/10/2014.
+ */
+public class PostDAO extends AbstractDAO<Post> {
+    public PostDAO(SessionFactory factory) {
         super(factory);
     }
 
-    public Member findById(Long id) {
+    public Post findById(Long id) {
         return get(id);
     }
 
-    public long create(Member member) {
-        return persist(member).getId();
+    public long create(String message, Member member) {
+        Post post = new Post(message, member);
+        return persist(post).getId();
     }
 
-    public Boolean deleteMember(Long id){
+    public Boolean deletePost(Long id){
         try {
             currentSession().beginTransaction();
-            Member m = findById(id);
-            currentSession().delete(m);
+            Post p = findById(id);
+            currentSession().delete(p);
             currentSession().getTransaction().commit();
         } catch (HibernateException e){
             e.printStackTrace();
@@ -34,8 +39,7 @@ public class MemberDAO extends AbstractDAO<Member> {
         return true;
     }
 
-    public List<Member> findAll() {
-        return list(namedQuery("com.brendex.flex.server.Member.findAll"));
+    public List<Post> findAll() {
+        return list(namedQuery("com.brendex.flex.server.Post.findAll"));
     }
 }
-

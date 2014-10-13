@@ -1,43 +1,50 @@
 package com.brendex.flex.server.domains;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "members")
 public class Member {
     @Id
-    private final int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "members_id_seq1")
+    @SequenceGenerator(name="members_id_seq1", sequenceName="members_id_seq1", allocationSize=1)
+    private long id;
 
     @Column(name = "`firstName`")
-    private final String firstName;
+    private String firstName;
 
     @Column(name = "`lastName`")
-    private final String lastName;
+    private String lastName;
 
-    private final String phone;
+    private String phone;
 
-    private final String email;
+    private String email;
+
+    private String password;
+
+    private String status;
+
+    @OneToMany(mappedBy = "member")
+    private Set<Post> posts;
 
     public Member() {
-        this.id= 0;
-        this.firstName = null;
-        this.lastName = null;
-        this.phone = null;
+        this.id = 0;
+        this.status = "ACTIVE";
         this.email = null;
+        this.status = null;
     }
 
-    public Member(int id, String firstName, String lastName, String phone, String email) {
-        this.id= id;
+    public Member(String firstName, String lastName, String phone, String email, String password) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
+        this.password = password;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public String getFirstName() {
@@ -48,5 +55,11 @@ public class Member {
     }
     public String getPhone() {
         return phone;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getPassword() {
+        return password;
     }
 }

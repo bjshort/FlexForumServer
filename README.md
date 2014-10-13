@@ -24,8 +24,8 @@ First phase of the project aims to acheive the following objectives:
 
 
 
-<h3>Userfull commands</h3>
+<h3>Useful commands</h3>
 
-Example POST:
-    curl --verbose --header "Content-Type: application/json" -X POST -d '{"firstName": "FOO", "lastName":"BAR", "phone":"324234234"}' http://localhost:8080/members/create
+<h5>Example POST:</h5>
+   - curl --verbose --header "Content-Type: application/json" -X POST -d '{"firstName": "FOOBARRR", "lastName":"BAR", "phone":"324234234", "email":"blah@blah.com", "password":"goatscheese"}' http://localhost:8080/members/create
   

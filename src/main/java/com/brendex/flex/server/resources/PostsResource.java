@@ -1,42 +1,39 @@
 package com.brendex.flex.server.resources;
-import com.brendex.flex.server.App;
+
+
 import com.brendex.flex.server.dao.MemberDAO;
+import com.brendex.flex.server.dao.PostDAO;
 import com.brendex.flex.server.domains.Member;
+import com.brendex.flex.server.domains.Post;
 import com.codahale.metrics.annotation.Timed;
-import com.sun.jersey.api.Responses;
 import io.dropwizard.hibernate.UnitOfWork;
-import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
-@Path("/members")
+@Path("/posts")
 @Produces(MediaType.APPLICATION_JSON)
-public class MembersResource {
+public class PostsResource {
+    private final PostDAO postDAO;
 
-    private final MemberDAO memberDAO;
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-
-    public MembersResource(MemberDAO dao) {
-        memberDAO = dao;
+    public PostsResource(PostDAO dao) {
+        postDAO = dao;
     }
 
     @GET
     @Path("/{id}")
-    public Response getMember(@PathParam("id") long id){
-        Member member = memberDAO.findById(id);
+    public Response getPost(@PathParam("id") long id){
+        Post post = postDAO.findById(id);
 
-        if(member != null){
+        if(post != null){
             return Response
-                    .ok(member)
+                    .ok(post)
                     .build();
         } else {
-            return Response.status(Responses.NOT_FOUND).build();
+            return Response.noContent().build();
         }
     }
 
@@ -44,21 +41,17 @@ public class MembersResource {
     @Path("/create")
     @Timed
     @UnitOfWork
-    public Response createMember(Member member) throws URISyntaxException {
-        try {
-            long newContactId = memberDAO.create(member);
-            return Response.created(new URI(String.valueOf(newContactId))).build();
-        } catch (Exception e){
-            LOGGER.error("There was an error adding that member: " + e.getMessage());
-            return Response.serverError().build();
-        }
+    public Response createPost(String message, Long memberId) throws URISyntaxException {
+        Member member = new Member();
+        long newContactId = postDAO.create(message, member);
+        return Response.created(new URI(String.valueOf(newContactId))).build();
     }
 
     @DELETE
     @Path("/delete/{id}")
     public Response deleteContact(@PathParam("id") Long id) {
         // delete the contact with the provided id
-        memberDAO.deleteMember(id);
+        postDAO.deletePost(id);
         return Response.noContent().build();
     }
 
@@ -72,5 +65,4 @@ public class MembersResource {
 //                new Member(id, member.getFirstName(), member.getLastName(),
 //                        member.getPhone())).build();
 //    }
-
 }
