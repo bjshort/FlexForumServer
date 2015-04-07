@@ -1,4 +1,5 @@
 package com.brendex.flex.server.resources;
+import com.brendex.flex.server.ApiResponse;
 import com.brendex.flex.server.App;
 import com.brendex.flex.server.dao.MemberDAO;
 import com.brendex.flex.server.domains.Member;
@@ -13,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 @Path("/members")
@@ -28,11 +30,40 @@ public class MembersResource {
 
     @GET
     @UnitOfWork
+    @Path("/")
+    public Response getMember(){
+        List<Member> members = memberDAO.findAll();
+        ApiResponse response = new ApiResponse(members);
+        if(members != null){
+            return Response
+                    .ok(response)
+                    .build();
+        } else {
+            return Response.status(Responses.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @UnitOfWork
     @Path("/{id}")
     public Response getMember(@PathParam("id") long id){
         System.out.println("-- Finding with id: " + id);
         Member member = memberDAO.findById(id);
         System.out.println("-- Memmber found : " + member);
+        if(member != null){
+            return Response
+                    .ok(member)
+                    .build();
+        } else {
+            return Response.status(Responses.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @UnitOfWork
+    @Path("email/{email}")
+    public Response getMember(@PathParam("email") String email){
+        Member member = memberDAO.findByEmail(email);
         if(member != null){
             return Response
                     .ok(member)
@@ -60,7 +91,12 @@ public class MembersResource {
     @Path("/{id}")
     public Response deleteContact(@PathParam("id") Long id) {
         // delete the contact with the provided id
-        memberDAO.deleteMember(id);
+        try {
+            memberDAO.deleteMember(id);
+        } catch (Exception e){
+            return Response.status(Responses.NOT_FOUND).build();
+        }
+
         return Response.noContent().build();
     }
 
